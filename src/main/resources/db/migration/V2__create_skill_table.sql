@@ -1,4 +1,4 @@
 CREATE TABLE skill(
-    id INT PRIMARY KEY NOT NULL,
+    id SERIAL PRIMARY KEY,
     skill_name VARCHAR(255)
 )

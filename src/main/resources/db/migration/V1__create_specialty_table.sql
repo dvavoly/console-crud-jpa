@@ -1,4 +1,4 @@
 CREATE TABLE specialty(
-    id INT PRIMARY KEY NOT NULL,
+    id SERIAL PRIMARY KEY,
     specialty_name VARCHAR(255)
 )

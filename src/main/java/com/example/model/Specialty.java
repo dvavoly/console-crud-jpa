@@ -1,6 +1,13 @@
 package com.example.model;
 
 import jakarta.persistence.*;
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 
 @Entity
 public class Specialty {
@@ -10,25 +17,6 @@ public class Specialty {
     private Integer id;
     @Column(name = "specialty_name")
     private String specialtyName;
-
-    public Specialty() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getSpecialtyName() {
-        return specialtyName;
-    }
-
-    public void setSpecialtyName(String specialtyName) {
-        this.specialtyName = specialtyName;
-    }
 
     @Override
     public String toString() {

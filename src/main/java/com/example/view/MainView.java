@@ -1,7 +1,7 @@
 package com.example.view;
 
-import com.example.utils.JpaUtil;
-import com.example.utils.Messages;
+import com.example.util.HibernateUtil;
+import com.example.util.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +35,7 @@ public class MainView {
         } catch (InputMismatchException exception) {
             LOGGER.info(Messages.BAD_INPUT.toString());
         } finally {
-            JpaUtil.shutdownEntityManagerFactory();
+            HibernateUtil.shutdownSessionFactory();
         }
     }
 }

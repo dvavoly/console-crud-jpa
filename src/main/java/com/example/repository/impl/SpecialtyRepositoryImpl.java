@@ -1,14 +1,14 @@
-package com.example.repository.jpa;
+package com.example.repository.impl;
 
 import com.example.model.Specialty;
 import com.example.repository.SpecialtyRepository;
-import com.example.utils.JpaUtil;
-import com.example.utils.Messages;
+import com.example.util.HibernateUtil;
+import com.example.util.Messages;
 
 import java.util.List;
 import java.util.Optional;
 
-public class JpaSpecialtyRepositoryImpl implements SpecialtyRepository {
+public class SpecialtyRepositoryImpl implements SpecialtyRepository {
     @Override
     public Optional<Specialty> getById(Integer id) {
 
@@ -16,23 +16,20 @@ public class JpaSpecialtyRepositoryImpl implements SpecialtyRepository {
             throw new IllegalArgumentException(Messages.ID_CANNOT_BE_NULL.toString());
         }
 
-        var entityManager = JpaUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-        var specialty = entityManager.find(Specialty.class, id);
-        entityManager.getTransaction().commit();
-        entityManager.close();
+        var session = HibernateUtil.openSession();
+        var specialty = session.find(Specialty.class, id);
         return Optional.ofNullable(specialty);
     }
 
     @Override
     public List<Specialty> getAll() {
-        var entityManager = JpaUtil.getEntityManager();
-        var criteriaBuilder = entityManager.getCriteriaBuilder();
+        var session = HibernateUtil.openSession();
+        var criteriaBuilder = session.getCriteriaBuilder();
         var query = criteriaBuilder.createQuery(Specialty.class);
         var rootEntry = query.from(Specialty.class);
         var all = query.select(rootEntry);
 
-        var allQuery = entityManager.createQuery(all);
+        var allQuery = session.createQuery(all);
         return allQuery.getResultList();
     }
 
@@ -41,11 +38,10 @@ public class JpaSpecialtyRepositoryImpl implements SpecialtyRepository {
         if (specialty == null || specialty.getSpecialtyName().isEmpty()) {
             throw new IllegalArgumentException(Messages.SPECIALTY_CANNOT_BE_NULL_OR_EMPTY.toString());
         }
-        var entityManager = JpaUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-        entityManager.persist(specialty);
-        entityManager.getTransaction().commit();
-        entityManager.close();
+        var session = HibernateUtil.openSession();
+        var transaction = session.getTransaction();
+        session.persist(specialty);
+        transaction.commit();
         return specialty;
     }
 
@@ -57,13 +53,12 @@ public class JpaSpecialtyRepositoryImpl implements SpecialtyRepository {
         if (specialty.getId() == null) {
             throw new IllegalArgumentException(Messages.ID_CANNOT_BE_NULL.toString());
         }
-        var entityManager = JpaUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-        Specialty result = entityManager.find(Specialty.class, specialty.getId());
+        var session = HibernateUtil.openSession();
+        var transaction = session.beginTransaction();
+        Specialty result = session.find(Specialty.class, specialty.getId());
         result.setSpecialtyName(specialty.getSpecialtyName());
-        entityManager.persist(result);
-        entityManager.getTransaction().commit();
-        entityManager.close();
+        session.persist(result);
+        transaction.commit();
         return result;
     }
 
@@ -72,11 +67,10 @@ public class JpaSpecialtyRepositoryImpl implements SpecialtyRepository {
         if (id == null) {
             throw new IllegalArgumentException(Messages.ID_CANNOT_BE_NULL.toString());
         }
-        var entityManager = JpaUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-        Specialty specialty = entityManager.find(Specialty.class, id);
-        entityManager.remove(specialty);
-        entityManager.getTransaction().commit();
-        entityManager.close();
+        var session = HibernateUtil.openSession();
+        var transaction = session.beginTransaction();
+        var specialty = session.find(Specialty.class, id);
+        session.remove(specialty);
+        transaction.commit();
     }
 }

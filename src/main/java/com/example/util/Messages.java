@@ -1,4 +1,4 @@
-package com.example.utils;
+package com.example.util;
 
 public enum Messages {
 

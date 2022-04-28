@@ -2,7 +2,7 @@ package com.example.view;
 
 import com.example.model.Specialty;
 import com.example.repository.SpecialtyRepository;
-import com.example.repository.jpa.JpaSpecialtyRepositoryImpl;
+import com.example.repository.impl.SpecialtyRepositoryImpl;
 import com.example.service.SpecialtyService;
 import com.example.service.impl.SpecialtyServiceImpl;
 import org.slf4j.Logger;
@@ -19,7 +19,7 @@ public class SpecialtyView {
 
     public SpecialtyView(Scanner scanner) {
         this.scanner = scanner;
-        SpecialtyRepository repository = new JpaSpecialtyRepositoryImpl();
+        SpecialtyRepository repository = new SpecialtyRepositoryImpl();
         specialtyService = new SpecialtyServiceImpl(repository);
     }
 

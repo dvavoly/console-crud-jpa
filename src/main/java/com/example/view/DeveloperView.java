@@ -5,7 +5,7 @@ import com.example.model.Skill;
 import com.example.model.Specialty;
 import com.example.model.enums.Status;
 import com.example.repository.DeveloperRepository;
-import com.example.repository.jpa.JpaDeveloperRepositoryImpl;
+import com.example.repository.impl.DeveloperRepositoryImpl;
 import com.example.service.DeveloperService;
 import com.example.service.impl.DeveloperServiceImpl;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public class DeveloperView {
 
     public DeveloperView(Scanner scanner) {
         this.scanner = scanner;
-        DeveloperRepository repository = new JpaDeveloperRepositoryImpl();
+        DeveloperRepository repository = new DeveloperRepositoryImpl();
         developerService = new DeveloperServiceImpl(repository);
     }
 

@@ -1,9 +1,10 @@
-package com.example.repository.jpa;
+package com.example.repository.impl;
 
 import com.example.model.Skill;
 import com.example.repository.SkillRepository;
-import com.example.utils.JpaUtil;
-import com.example.utils.Messages;
+import com.example.util.HibernateUtil;
+import com.example.util.Messages;
+import org.hibernate.Transaction;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,23 +15,20 @@ public class JpaSkillRepositoryImpl implements SkillRepository {
         if (id == null) {
             throw new IllegalArgumentException(Messages.ID_CANNOT_BE_NULL.toString());
         }
-        var entityManager = JpaUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-        var skill = entityManager.find(Skill.class, id);
-        entityManager.getTransaction().commit();
-        entityManager.close();
+        var session = HibernateUtil.openSession();
+        var skill = session.find(Skill.class, id);
         return Optional.ofNullable(skill);
     }
 
     @Override
     public List<Skill> getAll() {
-        var entityManager = JpaUtil.getEntityManager();
-        var criteriaBuilder = entityManager.getCriteriaBuilder();
+        var session = HibernateUtil.openSession();
+        var criteriaBuilder = session.getCriteriaBuilder();
         var query = criteriaBuilder.createQuery(Skill.class);
         var skillRoot = query.from(Skill.class);
         var all = query.select(skillRoot);
 
-        var allQuery = entityManager.createQuery(all);
+        var allQuery = session.createQuery(all);
         return allQuery.getResultList();
     }
 
@@ -39,11 +37,10 @@ public class JpaSkillRepositoryImpl implements SkillRepository {
         if (skill == null || skill.getSkillName().isEmpty()) {
             throw new IllegalArgumentException(Messages.SKILL_CANNOT_BE_NULL_OR_EMPTY.toString());
         }
-        var entityManager = JpaUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-        entityManager.persist(skill);
-        entityManager.getTransaction().commit();
-        entityManager.close();
+        var session = HibernateUtil.openSession();
+        var transaction = session.beginTransaction();
+        session.persist(skill);
+        transaction.commit();
         return skill;
     }
 
@@ -55,13 +52,12 @@ public class JpaSkillRepositoryImpl implements SkillRepository {
         if (skill.getId() == null) {
             throw new IllegalArgumentException(Messages.ID_CANNOT_BE_NULL.toString());
         }
-        var entityManager = JpaUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-        var result = entityManager.find(Skill.class, skill.getId());
+        var session = HibernateUtil.openSession();
+        var transaction = session.beginTransaction();
+        var result = session.find(Skill.class, skill.getId());
         result.setSkillName(skill.getSkillName());
-        entityManager.persist(result);
-        entityManager.getTransaction().commit();
-        entityManager.close();
+        session.persist(result);
+        transaction.commit();
         return result;
     }
 
@@ -70,11 +66,10 @@ public class JpaSkillRepositoryImpl implements SkillRepository {
         if (id == null) {
             throw new IllegalArgumentException(Messages.ID_CANNOT_BE_NULL.toString());
         }
-        var entityManager = JpaUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-        var skill = entityManager.find(Skill.class, id);
-        entityManager.remove(skill);
-        entityManager.getTransaction().commit();
-        entityManager.close();
+        var session = HibernateUtil.openSession();
+        var transaction = session.beginTransaction();
+        var skill = session.find(Skill.class, id);
+        session.remove(skill);
+        transaction.commit();
     }
 }

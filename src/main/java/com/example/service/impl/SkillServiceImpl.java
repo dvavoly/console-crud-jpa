@@ -2,7 +2,6 @@ package com.example.service.impl;
 
 import com.example.model.Skill;
 import com.example.repository.SkillRepository;
-import com.example.repository.jpa.JpaSkillRepositoryImpl;
 import com.example.service.SkillService;
 
 import java.util.List;

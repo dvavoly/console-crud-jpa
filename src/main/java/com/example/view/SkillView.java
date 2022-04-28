@@ -2,7 +2,7 @@ package com.example.view;
 
 import com.example.model.Skill;
 import com.example.repository.SkillRepository;
-import com.example.repository.jpa.JpaSkillRepositoryImpl;
+import com.example.repository.impl.JpaSkillRepositoryImpl;
 import com.example.service.SkillService;
 import com.example.service.impl.SkillServiceImpl;
 import org.slf4j.Logger;
